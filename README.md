@@ -18,7 +18,7 @@ Generates a table from a Context-Free Grammar to be printed or used as a base fo
 <Rule_N>
 ```
 * **Non_Term_1** is the **Start Variable**.
-* **"@"**, **"$"** and **"SS"** can't be used as **Non Terminals** nor **Terminals**. 
+* **"."**, **"$"** and **"SS"** can't be used as **Non Terminals** nor **Terminals**. 
 * **ALL** Non Terminals and Terminals used within the rules must be declared beforehand.
 
 **Example:**
