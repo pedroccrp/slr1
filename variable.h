@@ -5,7 +5,7 @@ using namespace std;
 
 // ---- Defs ----------------------------------------------------------------------
 
-#define POINT "@"
+#define POINT "."
 #define FINISH "$"
 #define INIT_VAR "SS"
 

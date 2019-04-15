@@ -22,6 +22,9 @@ rule_t rule_new (variable_t, vector<variable_t>);
 void rule_show (rule_t r);
 bool rule_compare (rule_t, rule_t);
 
+vector<variable_t> rules_first (variable_t, vector<rule_t>);  // First 1
+vector<variable_t> rules_follow (variable_t, vector<rule_t>); // Follow 1
+
 // ---- Implementation ----------------------------------------------------------------------
 
 rule_t rule_new (variable_t head, vector<variable_t> production) {
@@ -111,6 +114,20 @@ vector<rule_t> rule_expand (vector<rule_t> oldRules, vector<rule_t> defaultRules
 	}
 
 	return newRules;
+}
+
+vector<variable_t> rules_first (variable_t var, vector<rule_t> rules) {
+
+	vector<variable_t> first;
+
+	return first;
+}
+
+vector<variable_t> rules_follow (variable_t var, vector<rule_t> rules) {
+		
+	vector<variable_t> follow;
+
+	return follow;
 }
 
 #endif	

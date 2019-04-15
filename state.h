@@ -29,6 +29,10 @@ typedef struct state
 
 	vector<transition_t> transitions;
 
+	bool acc = false;
+
+	bool hasReduction = false;
+
 } state_t;
 
 // ---- Prototypes ----------------------------------------------------------------------
@@ -41,6 +45,7 @@ state_t state_add_transition (state_t, transition_t);
 state_t state_complete (state_t&, vector<rule_t>);
 void state_show (state_t);
 
+bool state_order_rule (state_t s1, state_t s2);
 // ---- Implementation ----------------------------------------------------------------------
 
 transition_t transition_new (variable_t v, short d) {
@@ -125,10 +130,25 @@ void state_show (state_t s) {
 	for (unsigned int k = 0; k < s.transitions.size(); ++k)
 	{	
 		cout << " " << s.transitions[k].var.id << " " << s.transitions[k].dest << endl;
-
 	}
 	
 	cout << endl;
+	
+	if (s.acc) {
+
+		cout << "ACC" << endl << endl;
+	}
+	
+	if (s.hasReduction) {
+
+		cout << "REDUCE" << endl << endl;
+	}
+
+}
+
+bool state_order_rule (state_t s1, state_t s2) {
+
+	return s1.num < s2.num;
 }
 
 #endif	

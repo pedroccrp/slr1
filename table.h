@@ -1,181 +1,196 @@
-#include <vector>
+#include <iostream>
 #include <map>
+#include <vector>
 
-#include "state.h"
-
-using namespace std;
+#include "grammar.h"
+#include "automata.h"
 
 #ifndef TABLE
 #define TABLE
-	
+
 // ---- Defs ----------------------------------------------------------------------
 
-short stateCount = 0;
-
-typedef enum {NONE, SHIFT, REDUCE} act_types;
+typedef enum {NONE, SHIFT, REDUCE, ACC} act_types;
 
 typedef struct action {
 	
 	act_types type;
 
-	union {
+	short stateDest;
 
-		short noneNum;
-		state_t* shiftDest;
-		rule_t* reduceRule;
-	};
+	rule_t reduceRule;
 
 } action_t;
 
-typedef struct table {
-	
-	vector<state_t> states;
-
-	map<state_t*, map<string, action_t>> relations;
-
-} table_t;
+typedef map<short, map<string, action_t>> table_t;
 
 // ---- Prototypes ----------------------------------------------------------------------
 
+table_t table_make (automata_t, grammar_t);
+
+void table_show (table_t, grammar_t);
+
 // ---- Implementation ----------------------------------------------------------------------
 
-table_t generate_states (table_t& tab, state_t& fromState, vector<variable_t> variables) {
-
-	// Organizes rules by variable after point
-	map<string, vector<rule_t>> separetedRules;
-
-	for (unsigned int i = 0; i < fromState.rules.size(); ++i)
-	{
-		for (unsigned int k = 0; k < fromState.rules[i].production.size(); ++k)
-		{
-			if (fromState.rules[i].production[k].id == POINT) {
-
-				if ((k + 1) < fromState.rules[i].production.size()) {
-
-					rule_t ruleAux = fromState.rules[i];
-
-					if (ruleAux.production[k + 1].id != FINISH) {
-
-						ruleAux.production[k] = ruleAux.production[k + 1];
-
-						ruleAux.production[k + 1].id = POINT;
-						ruleAux.production[k + 1].type = SPECIAL;
-
-
-						separetedRules[fromState.rules[i].production[k + 1].id].push_back(ruleAux);
-					}
-				
-				}
-
-				// else {
-
-				// 	// Need to make a reduce
-				// }
-
-				break;
-			}
-		}
-	}
-
-	// For each possible transition, make a new state and add transition to it
-	for (std::map<string, vector<rule_t>>::iterator it = separetedRules.begin(); it != separetedRules.end(); ++it)
-	{
-		state_t createdState;
-
-		for (unsigned int k = 0; k < it->second.size(); ++k)
-		{
-			createdState = state_add_rule(createdState, it->second[k]);
-		}
-
-
-		bool stateExists = false;
-
-		transition_t transitionAux;
-
-		for (unsigned int i = 0; i < variables.size(); ++i)
-		{
-			if (it->first == variables[i].id) {
-				
-				transitionAux.var = variables[i];
-				break;
-			}
-		}
-
-		for (unsigned int k = 0; k < tab.states.size(); ++k) {
-
-			if (state_compare(tab.states[k], createdState)) {
-
-				stateExists = true;
-				
-				transitionAux.dest = tab.states[k].num;
-				
-				break;
-			}
-		}
-
-		if (!stateExists) {
-
-			createdState.num = stateCount++;
-
-			transitionAux.dest = createdState.num;
-
-			state_complete(createdState, tab.states[0].rules);
-
-			tab.states.push_back(createdState);
-
-			tab = generate_states(tab, createdState, variables);
-		}
-
-		fromState.transitions.push_back(transitionAux);
-	}
-
-	return tab;
-}
-
-table_t table_make (grammar_t gram) {
-
-	// Add S' and $ to the variables of the grammar
-	gram.variables.push_back(variable_new(INIT_VAR, NON_TERM));
-	gram.variables.push_back(variable_new(FINISH, TERM));
+table_t table_make (automata_t aut, grammar_t gram) {
 
 	table_t tab;
 
-	stateCount = 0;
+	vector<state_t> states = aut.states;
 
-	// Make E0
+	map<string, action_t> base;
+
+	for (unsigned short i = 0; i < states.size(); ++i)
 	{
-		state_t stateAux = state_new(stateCount++);
+		state_t currentState = states[i];
 
-		stateAux = state_add_rule(stateAux, 
-			rule_new(variable_new(INIT_VAR, NON_TERM), {variable_new(POINT, SPECIAL), gram.variables[0], variable_new(FINISH, NON_TERM)}));
+		tab[i] = base;
 
-		for (unsigned int i = 0; i < gram.rules.size(); ++i)
-		{
-			rule_t ruleAux = gram.rules[i];
+		// STATE IS ACCEPTANCE
+		if (currentState.acc) {
 
-			ruleAux.production.insert(ruleAux.production.begin(), variable_new(POINT, SPECIAL));
+			action_t act;
 
-			stateAux = state_add_rule(stateAux, ruleAux);
+			act.type = ACC;	
+
+			tab[i][FINISH] = act;
+
+			continue;
 		}
 
-		tab.states.push_back(stateAux);
+		// SHIFTS and NORMAL TRANSITIONS
+		for (unsigned int k = 0; k < currentState.transitions.size(); ++k)
+		{	
+			variable_t transitionVar = currentState.transitions[k].var;
+
+			action_t act;
+
+			act.type = (transitionVar.type == NON_TERM) ? NONE : SHIFT;
+
+			act.stateDest = currentState.transitions[k].dest;
+
+			tab[i][transitionVar.id] = act;
+		}
+
+		// REDUCES
+		if (currentState.hasReduction) {
+
+			for (unsigned int k = 0; k < currentState.rules.size(); ++k) {
+
+				vector<variable_t> prod = currentState.rules[k].production;
+
+				if (prod[prod.size() - 1].id == POINT) {
+
+					action_t act;
+					
+					act.type = REDUCE;
+
+					act.reduceRule = currentState.rules[k];
+					act.reduceRule.production.pop_back();
+
+					vector<variable_t> followVars = rules_follow(currentState.rules[k].head, gram.rules);
+				}
+			}
+		}
 	}
-
-	state_t stateAux = tab.states[0];
-
-	generate_states(tab, stateAux, gram.variables);
-
-	tab.states[0] = stateAux;
 
 	return tab;
 }
 
-void table_show (table_t t) {
+void table_show (table_t tab, grammar_t gram) {
 
-	for (unsigned int i = 0; i < t.states.size(); ++i)
+	#define print_spaces(n) for (unsigned int count = 0; count < n; count++) {cout << " ";};
+
+	unsigned short maxSize = 10, minSize = 5;
+
+	vector<unsigned short> spaces;
+
+	print_spaces(maxSize);
+
+	for (unsigned int i = 0; i < gram.variables.size(); ++i)
 	{
-		state_show(t.states[i]);
+		cout << " | ";
+		cout << gram.variables[i].id;
+
+		short size = gram.variables[i].id.length();
+
+
+		if (size < minSize) {
+
+			print_spaces((unsigned short)(minSize - size));
+			spaces.push_back(minSize);
+		}
+
+		else {
+
+			spaces.push_back(size);
+		}
+	}
+
+	cout << " | " << endl << endl;
+
+	for (table_t::iterator it = tab.begin(); it != tab.end(); it++)
+	{
+		string num = to_string(it->first);
+
+		cout << "  " << num;
+
+		print_spaces(maxSize - num.length() - 2);
+
+		for (unsigned int i = 0; i < gram.variables.size(); ++i) {
+			
+			cout << " | ";
+
+			if ((it->second).find(gram.variables[i].id) == (it->second).end()) {
+
+				print_spaces(spaces[i]);
+			}
+
+			else {
+
+				action_t act = it->second[gram.variables[i].id];
+
+				if (act.type == NONE) {
+
+					string dest = to_string(act.stateDest);
+
+					cout << dest;
+
+					print_spaces(spaces[i] - dest.length());
+				}
+
+				else if (act.type == SHIFT) {
+
+					string dest = to_string(act.stateDest);
+
+					cout << "s" << dest;
+
+					print_spaces(spaces[i] - dest.length() - 1);
+
+				}
+
+				else if (act.type == ACC) {
+
+					cout << "ACC";
+
+					print_spaces((unsigned int)(spaces[i] - 3));
+				}
+
+				else {
+
+					vector<variable_t> prod = act.reduceRule.production;
+
+					cout << "r " <<  prod.size() << act.reduceRule.head.id; 
+
+					print_spaces(spaces[i] - to_string(prod.size()).length() - act.reduceRule.head.id.length());	
+				}
+			}
+		}
+
+
+		cout << " | ";
+		cout << endl << endl;
 	}
 }
 
-#endif	
+#endif
