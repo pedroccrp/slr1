@@ -178,7 +178,7 @@ void rules_first (set<string>& first, set<string>& partial_first, set<string>& p
 				auto pfi = partial_first;
 				auto pfo = partial_follow;
 
-				rules_follow(follow, pfi, pfo, rule->production[0].id, rules);
+				rules_follow(follow, pfi, pfo, rule->head.id, rules);
 
 				first.insert(follow.begin(), follow.end());	
 			}
@@ -204,6 +204,7 @@ void rules_follow (set<string>& follow, set<string>& partial_first, set<string>&
 				if ((prod + 1) != rule->production.end()) {
 
 					if ((prod + 1)->type == TERM) {
+
 
 						follow.insert((prod + 1)->id);
 					}
@@ -248,7 +249,13 @@ void rules_find_first (set<string>& first, map<string, set<string>>& follows, st
 
 				else {
 
-					first.insert(follows[rules[i].production[0].id].begin(), follows[rules[i].production[0].id].end());
+					set<string> fi;
+
+					rules_find_first(fi, follows, rules[i].production[0].id, rules);
+
+					first.insert(fi.begin(), fi.end());	
+					
+					// first.insert(follows[rules[i].production[0].id].begin(), follows[rules[i].production[0].id].end());
 				}	
 			}
 

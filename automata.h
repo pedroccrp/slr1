@@ -151,6 +151,7 @@ automata_t automata_make (grammar_t& gram) {
 	gram.variables.insert(gram.variables.begin(), variable_new(INIT_VAR, NON_TERM));
 	gram.variables.push_back(variable_new(FINISH, TERM));
 
+
 	automata_t aut;
 
 	stateCount = 0;
@@ -184,6 +185,8 @@ automata_t automata_make (grammar_t& gram) {
 
 	sort(aut.states.begin(), aut.states.end(), state_order_rule);
 
+	gram.rules.push_back(rule_new(variable_new(INIT_VAR, NON_TERM), {gram.variables[1], variable_new(FINISH, TERM)}));
+	
 	return aut;
 }
 

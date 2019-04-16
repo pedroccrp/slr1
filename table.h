@@ -27,13 +27,13 @@ typedef map<short, map<string, action_t>> table_t;
 
 // ---- Prototypes ----------------------------------------------------------------------
 
-table_t table_make (automata_t, grammar_t);
+table_t table_make (automata_t, grammar_t, map<string, set<string>>&, map<string, set<string>>&);
 
 void table_show (table_t, grammar_t);
 
 // ---- Implementation ----------------------------------------------------------------------
 
-table_t table_make (automata_t aut, grammar_t gram) {
+table_t table_make (automata_t aut, grammar_t gram, map<string, set<string>>& first, map<string, set<string>>& follow) {
 
 	table_t tab;
 
@@ -88,6 +88,18 @@ table_t table_make (automata_t aut, grammar_t gram) {
 
 					act.reduceRule = currentState.rules[k];
 					act.reduceRule.production.pop_back();
+
+					for (auto fol = follow[currentState.rules[k].head.id].begin(); fol != follow[currentState.rules[k].head.id].end(); ++fol)
+					{
+						if (tab[i].count(*fol)) {
+
+							cerr << "Conflict!" << endl;
+
+							exit(1);
+						}
+
+						tab[i][*fol] = act;
+					}
 				}
 			}
 		}
@@ -179,9 +191,9 @@ void table_show (table_t tab, grammar_t gram) {
 
 					vector<variable_t> prod = act.reduceRule.production;
 
-					cout << "r " <<  prod.size() << act.reduceRule.head.id; 
+					cout << "r" << " " << prod.size() << " " << act.reduceRule.head.id; 
 
-					print_spaces(spaces[i] - to_string(prod.size()).length() - act.reduceRule.head.id.length());	
+					print_spaces(spaces[i] - to_string(prod.size()).length() - act.reduceRule.head.id.length() - 3);	
 				}
 			}
 		}
