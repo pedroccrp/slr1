@@ -1,0 +1,12 @@
+S A IO AR DC
+; std -> id opa opl val : ?
+S 
+S id : S
+S A ; S
+A IO
+A AR
+A DC
+IO std -> id
+IO val -> std
+AR val opa val -> id
+DC val opl val ? id

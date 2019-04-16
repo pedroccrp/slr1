@@ -13,6 +13,17 @@ int main(int argc, char const *argv[])
 
 	// grammar_show(gram);
 
+	map<string, set<string>> first, follow;
+
+	rules_generate_first_follow (gram.variables, gram.rules, first, follow);
+
+	cout << "-----------------------" << endl;
+	cout << "First" << endl;
+	first_follow_print(first);
+	cout << "-----------------------" << endl;
+	cout << "Follow" << endl;
+	first_follow_print(follow);
+
 	automata_t aut = automata_make(gram);
 
 	// automata_show(aut);
@@ -21,7 +32,7 @@ int main(int argc, char const *argv[])
 
 	table_t tab = table_make(aut, gram);
 
-	table_show(tab, gram);
+	// table_show(tab, gram);
 
 	return 0;
 }

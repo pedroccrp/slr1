@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <set>
 
 #include "grammar.h"
 #include "automata.h"
@@ -87,8 +88,6 @@ table_t table_make (automata_t aut, grammar_t gram) {
 
 					act.reduceRule = currentState.rules[k];
 					act.reduceRule.production.pop_back();
-
-					vector<variable_t> followVars = rules_follow(currentState.rules[k].head, gram.rules);
 				}
 			}
 		}
