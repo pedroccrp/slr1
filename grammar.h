@@ -149,20 +149,25 @@ variable_t grammar_find_variable (grammar g, string id) {
 
 void grammar_show (grammar g) {
 
-	cout << "Variables:" << endl << endl;
+
+	cout << endl << endl << "------- Grammar ----------------------------------------------------------------------" << endl << endl;
+
+	cout << "  Variables:" << endl << endl;
 
 	for (unsigned int i = 0; i < g.variables.size(); ++i)
 	{
 
-		cout << " ID: " << g.variables[i].id << endl; 
-		cout << " Tp: " << g.variables[i].type << endl; 
+		cout << "    ID: " << g.variables[i].id << endl; 
+		cout << "    Tp: " << ((g.variables[i].type == NON_TERM) ? "Non-Terminal" : "Terminal") << endl; 
 		cout << endl;
 	}
 
-	cout << "Rules:" << endl << endl;
+	cout << " Rules:" << endl << endl;
 
 	for (unsigned int i = 0; i < g.rules.size(); ++i)
 	{
+		cout << "    ";
+
 		rule_show(g.rules[i]);
 	}
 }

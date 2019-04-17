@@ -147,35 +147,42 @@ bool state_compare (state_t s1, state_t s2) {
 
 void state_show (state_t s) {
 
-	cout << "------------- "<< s.num << " ---------------------" << endl;
+	cout << "------------- "<< s.num << " ---------------------" << endl << endl;
 
-	cout << "Rules: " << endl;
+	cout << "  Rules: " << endl << endl;
 
 	for (unsigned int k = 0; k < s.rules.size(); ++k)
 	{	
-		cout << " ";
+		cout << "    ";
 		rule_show(s.rules[k]);
 	}
 
 	cout << endl;
 
-	cout << "Transitions: " << endl;
+	cout << "  Transitions: " << endl << endl;
 	
 	for (unsigned int k = 0; k < s.transitions.size(); ++k)
 	{	
-		cout << " " << s.transitions[k].var.id << " " << s.transitions[k].dest << endl;
+		cout << "    " << s.transitions[k].var.id << " " << s.transitions[k].dest << endl;
 	}
 	
 	cout << endl;
 	
+	cout << "  Type: ";
+
 	if (s.acc) {
 
 		cout << "ACC" << endl << endl;
 	}
 	
-	if (s.hasReduction) {
+	else if (s.hasReduction) {
 
 		cout << "REDUCE" << endl << endl;
+	}
+
+	else {
+
+		cout << endl << endl;
 	}
 
 }

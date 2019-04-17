@@ -110,6 +110,8 @@ table_t table_make (automata_t aut, grammar_t gram, map<string, set<string>>& fi
 
 void table_show (table_t tab, grammar_t gram) {
 
+	cout << endl << endl << "------- Table -----------------------------------------------------------------------" << endl << endl;
+
 	#define print_spaces(n) for (unsigned int count = 0; count < n; count++) {cout << " ";};
 
 	unsigned short maxSize = 20, minSize = 20;

@@ -8,21 +8,27 @@
 using namespace std;
 
 int main(int argc, char const *argv[])
-{
+{	
+	// --------- Grammar --------------------------------------
+	
 	grammar_t gram = grammar_request();
 
-	// grammar_show(gram);
+	grammar_show(gram);
 
+	// --------- Automata --------------------------------------
+	
 	automata_t aut = automata_make(gram);
 
 	automata_show(aut);
 
-	// automata_get_state_from_num(aut, 1);
-
+	// --------- First Follow ----------------------------------
+	
 	map<string, set<string>> first, follow;
 
 	rules_generate_first_follow (gram.variables, gram.rules, first, follow);
 
+	// --------- Table -----------------------------------------
+	
 	table_t tab = table_make(aut, gram, first, follow);
 
 	table_show(tab, gram);

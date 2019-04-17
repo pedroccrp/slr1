@@ -194,6 +194,8 @@ automata_t automata_make (grammar_t& gram) {
 
 void automata_show (automata_t aut) {
 
+	cout << endl << endl << "------- Automata --------------------------------------------------------------------" << endl << endl;
+
 	for (unsigned int i = 0; i < aut.states.size(); ++i)
 	{
 		state_show(aut.states[i]);
