@@ -93,7 +93,7 @@ table_t table_make (automata_t aut, grammar_t gram, map<string, set<string>>& fi
 					{
 						if (tab[i].count(*fol)) {
 
-							cerr << "Conflict!" << endl;
+							cerr << "Conflict: " << currentState.num << endl;
 
 							exit(1);
 						}
@@ -112,7 +112,7 @@ void table_show (table_t tab, grammar_t gram) {
 
 	#define print_spaces(n) for (unsigned int count = 0; count < n; count++) {cout << " ";};
 
-	unsigned short maxSize = 10, minSize = 5;
+	unsigned short maxSize = 20, minSize = 20;
 
 	vector<unsigned short> spaces;
 

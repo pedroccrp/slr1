@@ -38,6 +38,11 @@ grammar_t grammar_request () {
 
 	while (i++, getline(cin, aux)) {
 
+		if (aux == "") {
+
+			continue;
+		}
+
 		// Non-terminals
 		if (i == 1) {
 			
@@ -106,10 +111,13 @@ void grammar_string_to_var (string str, var_types type, grammar_t& g) {
 	{
 		if (str[j] == ' ') {
 
-			v.id = token;
-			g.variables.push_back(v);
-			
-			token = "";
+			if (token != "") {
+
+				v.id = token;
+				g.variables.push_back(v);
+				
+				token = "";
+			}
 		}
 
 		else {

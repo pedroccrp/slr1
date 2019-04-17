@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
 
 	automata_t aut = automata_make(gram);
 
-	// automata_show(aut);
+	automata_show(aut);
 
 	// automata_get_state_from_num(aut, 1);
 
