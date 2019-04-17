@@ -227,7 +227,7 @@ void rules_follow (set<string>& follow, set<string>& partial_first, set<string>&
 					auto pfi = partial_first;
 					auto pfo = partial_follow;
 
-					rules_follow(follow, pfi, pfo, rule->production[0].id, rules);
+					rules_follow(follow, pfi, pfo, rule->head.id, rules);
 				}
 			}
 		}	
@@ -267,17 +267,19 @@ void rules_find_first (set<string>& first, map<string, set<string>>& follows, st
 	}
 }
 
-void first_follow_print (map<string, set<string>> conj) {
+void first_follow_print (map<string, set<string>> conj, bool isFirst) {
+
+	cout << endl << endl << "------- " << (isFirst ? "First" : "Follow") << " ----------------------------------------------------------------------" << endl << endl;
 
 	for (auto fi = conj.begin(); fi != conj.end(); ++fi) {
 
 		cout << "-----------------------" << endl << endl;
 
-		cout << fi->first << endl << endl;
+		cout << "  " << fi->first << endl << endl;
 
 		for (auto v = fi->second.begin(); v != fi->second.end(); ++v)
 		{
-			cout << "  " << *v << endl;
+			cout << "    " << *v << endl;
 		}
 		
 		cout << endl;

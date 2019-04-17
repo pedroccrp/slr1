@@ -27,6 +27,9 @@ int main(int argc, char const *argv[])
 
 	rules_generate_first_follow (gram.variables, gram.rules, first, follow);
 
+	// first_follow_print(first, true);
+	// first_follow_print(follow, false);
+
 	// --------- Table -----------------------------------------
 	
 	table_t tab = table_make(aut, gram, first, follow);
