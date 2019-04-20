@@ -83,17 +83,19 @@ state_t state_add_transition (state_t s, transition_t t) {
 
 state_t state_complete (state_t& s, vector<rule_t> defaultRules) {
 
-	vector<rule_t> oldRules = s.rules, newRules;
+	vector<rule_t> oldRules = s.rules, newRules, auxRules;
 
-	while (newRules = rule_expand(oldRules, defaultRules), newRules.size() > 0) {
+	do {
 
-		vector<rule_t> auxRules;
+		newRules = rule_expand(oldRules, defaultRules);
+
+		auxRules.clear();
 
 		for (std::vector<rule_t>::iterator n = newRules.begin(); n != newRules.end(); ++n) {
 			
 			bool exists = false;
 
-			for (std::vector<rule_t>::iterator o = oldRules.begin(); o != oldRules.end(); ++o) {
+			for (std::vector<rule_t>::iterator o = s.rules.begin(); o != s.rules.end(); ++o) {
 
 				if (rule_compare(*o, *n)) {
 
@@ -111,7 +113,8 @@ state_t state_complete (state_t& s, vector<rule_t> defaultRules) {
 		oldRules = auxRules;
 
 		s.rules.insert(s.rules.end(), auxRules.begin(), auxRules.end());
-	}
+	
+	} while (oldRules.size() > 0);
 
 	return s;
 }
