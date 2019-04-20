@@ -87,24 +87,13 @@ state_t state_complete (state_t& s, vector<rule_t> defaultRules) {
 
 	while (newRules = rule_expand(oldRules, defaultRules), newRules.size() > 0) {
 
-		vector<rule_t> auxRules, auxRules2;
+		vector<rule_t> auxRules;
 
-		for (std::vector<rule_t>::iterator o = oldRules.begin(); o != oldRules.end(); ++o) {
-			
-			for (std::vector<rule_t>::iterator n = newRules.begin(); n != newRules.end(); ++n) {
-
-				if (!rule_compare(*o, *n)) {
-
-					auxRules.push_back(*n);
-				}
-			}
-		}
-
-		for (std::vector<rule_t>::iterator o = auxRules.begin(); o != auxRules.end(); ++o) {
+		for (std::vector<rule_t>::iterator n = newRules.begin(); n != newRules.end(); ++n) {
 			
 			bool exists = false;
 
-			for (std::vector<rule_t>::iterator n = auxRules2.begin(); n != auxRules2.end(); ++n) {
+			for (std::vector<rule_t>::iterator o = oldRules.begin(); o != oldRules.end(); ++o) {
 
 				if (rule_compare(*o, *n)) {
 
@@ -115,13 +104,13 @@ state_t state_complete (state_t& s, vector<rule_t> defaultRules) {
 
 			if (!exists) {
 
-					auxRules2.push_back(*o);
+				auxRules.push_back(*n);
 			}
 		}
 
-		oldRules = auxRules2;
+		oldRules = auxRules;
 
-		s.rules.insert(s.rules.end(), auxRules2.begin(), auxRules2.end());
+		s.rules.insert(s.rules.end(), auxRules.begin(), auxRules.end());
 	}
 
 	return s;

@@ -25,10 +25,10 @@ int main(int argc, char const *argv[])
 	
 	map<string, set<string>> first, follow;
 
-	rules_generate_first_follow (gram.variables, gram.rules, first, follow);
+	rules_generate_first_follow(gram.variables, gram.rules, first, follow);
 
-	// first_follow_print(first, true);
-	// first_follow_print(follow, false);
+	first_follow_print(first, true);
+	first_follow_print(follow, false);
 
 	// --------- Table -----------------------------------------
 	

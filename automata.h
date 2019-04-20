@@ -98,7 +98,7 @@ automata_t generate_states (automata_t& aut, state_t& fromState) {
 		}
 
 		state_complete(createdState, aut.states[0].rules);
-		
+
 		for (unsigned int k = 0; k < aut.states.size(); ++k) {
 
 			if (state_compare(aut.states[k], createdState)) {
@@ -116,8 +116,6 @@ automata_t generate_states (automata_t& aut, state_t& fromState) {
 			createdState.num = stateCount++;
 
 			transitionAux.dest = createdState.num;
-
-
 
 			aut.states.push_back(createdState);
 

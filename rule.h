@@ -26,7 +26,7 @@ bool rule_compare (rule_t, rule_t);
 
 void rules_first (set<string>&, set<string>&, set<string>&, string, vector<rule_t>&);  // First 1
 void rules_follow (set<string>&, set<string>&, set<string>&, string, vector<rule_t>&);  // First 1
-void rules_find_first (set<string>&, map<string, set<string>>&, string, vector<rule_t>&);  // Follow 1
+void rules_find_first (set<string>&, set<string>&, map<string, set<string>>&, string, vector<rule_t>&);  // Follow 1
 
 // ---- Implementation ----------------------------------------------------------------------
 
@@ -135,9 +135,9 @@ void rules_generate_first_follow (vector<variable_t> vars, vector<rule_t> rules,
 		
 		if (it->type == NON_TERM) {
 
-			set<string> partial_first, partial_follow;
+			set<string> partial_first;
 
-			rules_find_first(first[it->id], follow, it->id, rules);
+			rules_find_first(first[it->id], partial_first, follow, it->id, rules);
 		}
 	}
 }
@@ -234,8 +234,15 @@ void rules_follow (set<string>& follow, set<string>& partial_first, set<string>&
 	}
 }
 
-void rules_find_first (set<string>& first, map<string, set<string>>& follows, string var, vector<rule_t>& rules) {
-	
+void rules_find_first (set<string>& first, set<string>& partial_first, map<string, set<string>>& follows, string var, vector<rule_t>& rules) {
+
+	if (partial_first.count(var)) {
+
+		return;
+	}
+
+	partial_first.insert(var);
+
 	for (unsigned int i = 0; i < rules.size(); ++i)	{
 		
 		if (var == rules[i].head.id) {
@@ -251,11 +258,9 @@ void rules_find_first (set<string>& first, map<string, set<string>>& follows, st
 
 					set<string> fi;
 
-					rules_find_first(fi, follows, rules[i].production[0].id, rules);
+					rules_find_first(fi, partial_first, follows, rules[i].production[0].id, rules);
 
 					first.insert(fi.begin(), fi.end());	
-					
-					// first.insert(follows[rules[i].production[0].id].begin(), follows[rules[i].production[0].id].end());
 				}	
 			}
 
