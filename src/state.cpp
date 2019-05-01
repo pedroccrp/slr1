@@ -1,51 +1,14 @@
+#include "state.h"
+
+#include <iostream>
 #include <vector>
 
+#include "rule.h"
 #include "grammar.h"
+#include "variable.h"
 
 using namespace std;
 
-#ifndef STATE
-#define STATE
-	
-// ---- Defs ----------------------------------------------------------------------
-
-
-typedef struct transition transition_t;
-typedef struct state state_t;
-
-typedef struct transition
-{
-	variable_t var;
-
-	short dest;
-	
-} transition_t;
-
-typedef struct state
-{
-	short num;
-
-	vector<rule_t> rules;
-
-	vector<transition_t> transitions;
-
-	bool acc = false;
-
-	bool hasReduction = false;
-
-} state_t;
-
-// ---- Prototypes ----------------------------------------------------------------------
-
-transition_t transition_new (variable_t, short);
-
-state_t state_new (short);
-state_t state_add_rule (state_t, rule_t);
-state_t state_add_transition (state_t, transition_t);
-state_t state_complete (state_t&, vector<rule_t>);
-void state_show (state_t);
-
-bool state_order_rule (state_t s1, state_t s2);
 // ---- Implementation ----------------------------------------------------------------------
 
 transition_t transition_new (variable_t v, short d) {
@@ -83,6 +46,11 @@ state_t state_add_transition (state_t s, transition_t t) {
 
 state_t state_complete (state_t& s, vector<rule_t> defaultRules) {
 
+	for (auto defR = defaultRules.begin(); defR != defaultRules.end(); ++defR)
+	{
+		defR->production.insert(defR->production.begin(), variable_new(POINT, SPECIAL));
+	}
+
 	vector<rule_t> oldRules = s.rules, newRules, auxRules;
 
 	do {
@@ -117,24 +85,6 @@ state_t state_complete (state_t& s, vector<rule_t> defaultRules) {
 	} while (oldRules.size() > 0);
 
 	return s;
-}
-
-bool state_compare (state_t s1, state_t s2) {
-
-	if (s1.rules.size() != s2.rules.size()) {
-
-		return false;
-	}
-
-	for (unsigned int i = 0; i < s1.rules.size(); ++i)
-	{
-		if (!rule_compare(s1.rules[i], s2.rules[i])) {
-
-			return false;
-		}
-	}
-
-	return true;
 }
 
 void state_show (state_t s) {
@@ -183,5 +133,3 @@ bool state_order_rule (state_t s1, state_t s2) {
 
 	return s1.num < s2.num;
 }
-
-#endif	

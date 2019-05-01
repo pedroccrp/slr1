@@ -1,36 +1,21 @@
+#include "grammar.h"
+
 #include <iostream>
 #include <vector>
 #include <string>
 
+#include "variable.h"
 #include "rule.h"
 
 using namespace std;
 
-#ifndef GRAMMAR
-#define GRAMMAR
+// ---- Global Variables --------------------------------------------------------------------
 
-// ---- Defs ----------------------------------------------------------------------
-
-typedef struct grammar {
-	
-	vector<variable> variables;
-	vector<rule> rules;
-
-} grammar_t;
-
-// ---- Prototypes ----------------------------------------------------------------------
-
-grammar_t grammar_request ();
-
-variable_t grammar_find_variable (grammar, string);
-
-void grammar_string_to_var (string, var_types, grammar_t&);
+grammar_t grammar_global;
 
 // ---- Implementation ----------------------------------------------------------------------
 
 grammar_t grammar_request () {
-
-	grammar_t g;
 
 	short i = 0;
 
@@ -46,13 +31,13 @@ grammar_t grammar_request () {
 		// Non-terminals
 		if (i == 1) {
 			
-			grammar_string_to_var(aux, NON_TERM, g);	
+			grammar_string_to_var(aux, NON_TERM, grammar_global);	
 		}
 
 		// Terminals
 		else if (i == 2) {
 
-			grammar_string_to_var(aux, TERM, g);
+			grammar_string_to_var(aux, TERM, grammar_global);
 		}
 
 		// Rules (Head + Production)
@@ -72,12 +57,12 @@ grammar_t grammar_request () {
 
 						gotHead = true;
 
-						r.head = grammar_find_variable(g, token);
+						r.head = grammar_find_variable(token);
 					}
 
 					else {
 
-						r.production.push_back(grammar_find_variable(g, token));
+						r.production.push_back(grammar_find_variable(token));
 					}
 
 					token = "";
@@ -91,17 +76,17 @@ grammar_t grammar_request () {
 
 			if (token != "") {
 
-				r.production.push_back(grammar_find_variable(g, token));
+				r.production.push_back(grammar_find_variable(token));
 			}
 
-			g.rules.push_back(r);
+			grammar_global.rules.push_back(r);
 		}
 	}	
 
-	return g;
+	return grammar_global;
 }
 
-void grammar_string_to_var (string str, var_types type, grammar_t& g) {
+void grammar_string_to_var (string str, var_types type, grammar_t& grammar_global) {
 
 	variable_t v = variable_new("", type);
 
@@ -114,7 +99,7 @@ void grammar_string_to_var (string str, var_types type, grammar_t& g) {
 			if (token != "") {
 
 				v.id = token;
-				g.variables.push_back(v);
+				grammar_global.variables.push_back(v);
 				
 				token = "";
 			}
@@ -129,17 +114,17 @@ void grammar_string_to_var (string str, var_types type, grammar_t& g) {
 	if (token != "") {
 
 		v.id = token;
-		g.variables.push_back(v);
+		grammar_global.variables.push_back(v);
 	}
 }
 
-variable_t grammar_find_variable (grammar g, string id) {
+variable_t grammar_find_variable (string id) {
 
-	for (unsigned int i = 0; i < g.variables.size(); ++i)
+	for (unsigned int i = 0; i < grammar_global.variables.size(); ++i)
 	{
-		if (g.variables[i].id == id) {
+		if (grammar_global.variables[i].id == id) {
 
-			return g.variables[i];
+			return grammar_global.variables[i];
 		}
 	}
 
@@ -147,29 +132,27 @@ variable_t grammar_find_variable (grammar g, string id) {
 	return variable_new("", TERM);
 }
 
-void grammar_show (grammar g) {
+void grammar_show () {
 
 
 	cout << endl << endl << "------- Grammar ----------------------------------------------------------------------" << endl << endl;
 
 	cout << "  Variables:" << endl << endl;
 
-	for (unsigned int i = 0; i < g.variables.size(); ++i)
+	for (unsigned int i = 0; i < grammar_global.variables.size(); ++i)
 	{
 
-		cout << "    ID: " << g.variables[i].id << endl; 
-		cout << "    Tp: " << ((g.variables[i].type == NON_TERM) ? "Non-Terminal" : "Terminal") << endl; 
+		cout << "    ID: " << grammar_global.variables[i].id << endl; 
+		cout << "    Tp: " << ((grammar_global.variables[i].type == NON_TERM) ? "Non-Terminal" : "Terminal") << endl; 
 		cout << endl;
 	}
 
 	cout << " Rules:" << endl << endl;
 
-	for (unsigned int i = 0; i < g.rules.size(); ++i)
+	for (unsigned int i = 0; i < grammar_global.rules.size(); ++i)
 	{
 		cout << "    ";
 
-		rule_show(g.rules[i]);
+		rule_show(grammar_global.rules[i]);
 	}
 }
-
-#endif

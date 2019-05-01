@@ -1,32 +1,14 @@
-#include <vector>
-#include <set>
+#include "rule.h"
+
 #include <map>
+#include <set>
+#include <string>
+#include <vector>
+#include <iostream>
 
 #include "variable.h"
 
 using namespace std;
-
-#ifndef RULE
-#define RULE
-	
-// ---- Defs ----------------------------------------------------------------------
-
-typedef struct rule {
-	
-	variable_t head;
-	vector<variable_t> production;
-
-} rule_t;
-
-// ---- Prototypes ----------------------------------------------------------------------
-
-rule_t rule_new (variable_t, vector<variable_t>);
-void rule_show (rule_t r);
-bool rule_compare (rule_t, rule_t);
-
-void rules_first (set<string>&, set<string>&, set<string>&, string, vector<rule_t>&);  // First 1
-void rules_follow (set<string>&, set<string>&, set<string>&, string, vector<rule_t>&);  // First 1
-void rules_find_first (set<string>&, set<string>&, map<string, set<string>>&, string, vector<rule_t>&);  // Follow 1
 
 // ---- Implementation ----------------------------------------------------------------------
 
@@ -121,13 +103,13 @@ vector<rule_t> rule_expand (vector<rule_t> oldRules, vector<rule_t> defaultRules
 
 void rules_generate_first_follow (vector<variable_t> vars, vector<rule_t> rules, map<string, set<string>>& first, map<string, set<string>>& follow) {
 
-	for (auto it = vars.begin(); it != vars.end(); ++it) {
+	for (auto variable_iterator : vars) {
 		
-		if (it->type == NON_TERM) {
+		if (variable_iterator.type == NON_TERM) {
 
 			set<string> partial_first, partial_follow;
 
-			rules_follow(follow[it->id], partial_first, partial_follow, it->id, rules);
+			rules_follow(follow[variable_iterator.id], partial_first, partial_follow, variable_iterator.id, rules);
 		}
 	}
 
@@ -292,5 +274,3 @@ void first_follow_print (map<string, set<string>> conj, bool isFirst) {
 
 	cout << endl;
 }
-
-#endif	

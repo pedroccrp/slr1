@@ -11,30 +11,30 @@ int main(int argc, char const *argv[])
 {	
 	// --------- Grammar --------------------------------------
 	
-	grammar_t gram = grammar_request();
+	grammar_request();
 
-	grammar_show(gram);
+	grammar_show();
 
 	// --------- Automata --------------------------------------
 	
-	automata_t aut = automata_make(gram);
+	automata_make();
 
-	automata_show(aut);
+	automata_show();
 
 	// --------- First Follow ----------------------------------
 	
 	map<string, set<string>> first, follow;
 
-	rules_generate_first_follow(gram.variables, gram.rules, first, follow);
+	rules_generate_first_follow(grammar_global.variables, grammar_global.rules, first, follow);
 
 	first_follow_print(first, true);
 	first_follow_print(follow, false);
 
 	// --------- Table -----------------------------------------
 	
-	table_t tab = table_make(aut, gram, first, follow);
+	table_t tab = table_make(first, follow);
 
-	table_show(tab, gram);
+	table_show();
 
 	return 0;
 }

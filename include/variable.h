@@ -1,7 +1,7 @@
 #ifndef VARIABLE
 #define VARIABLE
 
-using namespace std;
+#include <string>
 
 // ---- Defs ----------------------------------------------------------------------
 
@@ -13,25 +13,13 @@ typedef enum {TERM, NON_TERM, SPECIAL} var_types;
 
 typedef struct variable {
 	
-	string id;
+	std::string id;
 	var_types type;
 
 } variable_t;
 
 // ---- Prototypes ----------------------------------------------------------------------
 
-variable_t variable_new (string, var_types);
-
-// ---- Implementation ----------------------------------------------------------------------
-
-variable_t variable_new (string id, var_types type) {
-
-	variable_t v;
-
-	v.id = id;
-	v.type = type;
-
-	return v;
-}
+variable_t variable_new (std::string, var_types);
 
 #endif

@@ -1,51 +1,32 @@
-#include <iostream>
-#include <map>
-#include <vector>
-#include <set>
+#include "table.h"
 
+#include <map>
+#include <set>
+#include <string>
+#include <vector>
+#include <iostream>
+
+#include "rule.h"
 #include "grammar.h"
 #include "automata.h"
 
-#ifndef TABLE
-#define TABLE
+using namespace std;
 
-// ---- Defs ----------------------------------------------------------------------
+// ---- Global Variables --------------------------------------------------------------------
 
-typedef enum {NONE, SHIFT, REDUCE, ACC} act_types;
-
-typedef struct action {
-	
-	act_types type;
-
-	short stateDest;
-
-	rule_t reduceRule;
-
-} action_t;
-
-typedef map<short, map<string, action_t>> table_t;
-
-// ---- Prototypes ----------------------------------------------------------------------
-
-table_t table_make (automata_t, grammar_t, map<string, set<string>>&, map<string, set<string>>&);
-
-void table_show (table_t, grammar_t);
+table_t table_global;
 
 // ---- Implementation ----------------------------------------------------------------------
 
-table_t table_make (automata_t aut, grammar_t gram, map<string, set<string>>& first, map<string, set<string>>& follow) {
-
-	table_t tab;
-
-	vector<state_t> states = aut.states;
+table_t table_make (map<string, set<string>>& first, map<string, set<string>>& follow) {
 
 	map<string, action_t> base;
 
-	for (unsigned short i = 0; i < states.size(); ++i)
+	for (auto state_iterator : automata_global.states)
 	{
-		state_t currentState = states[i];
+		state_t currentState = state_iterator;
 
-		tab[i] = base;
+		table_global[state_iterator.num] = base;
 
 		// STATE IS ACCEPTANCE
 		if (currentState.acc) {
@@ -54,7 +35,7 @@ table_t table_make (automata_t aut, grammar_t gram, map<string, set<string>>& fi
 
 			act.type = ACC;	
 
-			tab[i][FINISH] = act;
+			table_global[state_iterator.num][FINISH] = act;
 
 			continue;
 		}
@@ -70,7 +51,7 @@ table_t table_make (automata_t aut, grammar_t gram, map<string, set<string>>& fi
 
 			act.stateDest = currentState.transitions[k].dest;
 
-			tab[i][transitionVar.id] = act;
+			table_global[state_iterator.num][transitionVar.id] = act;
 		}
 
 		// REDUCES
@@ -91,24 +72,22 @@ table_t table_make (automata_t aut, grammar_t gram, map<string, set<string>>& fi
 
 					for (auto fol = follow[currentState.rules[k].head.id].begin(); fol != follow[currentState.rules[k].head.id].end(); ++fol)
 					{
-						if (tab[i].count(*fol)) {
+						if (table_global[state_iterator.num].count(*fol)) {
 
-							cerr << "Conflict: " << i << " " << currentState.rules[k].head.id << " " << *fol << endl;
-
-							// exit(1);
+							cerr << "Conflict: " << state_iterator.num << " " << currentState.rules[k].head.id << " " << *fol << endl;
 						}
 
-						tab[i][*fol] = act;
+						table_global[state_iterator.num][*fol] = act;
 					}
 				}
 			}
 		}
 	}
 
-	return tab;
+	return table_global;
 }
 
-void table_show (table_t tab, grammar_t gram) {
+void table_show () {
 
 	cout << endl << endl << "------- Table -----------------------------------------------------------------------" << endl << endl;
 
@@ -120,12 +99,12 @@ void table_show (table_t tab, grammar_t gram) {
 
 	print_spaces(maxSize);
 
-	for (unsigned int i = 0; i < gram.variables.size(); ++i)
+	for (unsigned int i = 0; i < grammar_global.variables.size(); ++i)
 	{
 		cout << " | ";
-		cout << gram.variables[i].id;
+		cout << grammar_global.variables[i].id;
 
-		short size = gram.variables[i].id.length();
+		short size = grammar_global.variables[i].id.length();
 
 
 		if (size < minSize) {
@@ -142,7 +121,7 @@ void table_show (table_t tab, grammar_t gram) {
 
 	cout << " | " << endl << endl;
 
-	for (table_t::iterator it = tab.begin(); it != tab.end(); it++)
+	for (table_t::iterator it = table_global.begin(); it != table_global.end(); it++)
 	{
 		string num = to_string(it->first);
 
@@ -150,18 +129,18 @@ void table_show (table_t tab, grammar_t gram) {
 
 		print_spaces(maxSize - num.length() - 2);
 
-		for (unsigned int i = 0; i < gram.variables.size(); ++i) {
+		for (unsigned int i = 0; i < grammar_global.variables.size(); ++i) {
 			
 			cout << " | ";
 
-			if ((it->second).find(gram.variables[i].id) == (it->second).end()) {
+			if ((it->second).find(grammar_global.variables[i].id) == (it->second).end()) {
 
 				print_spaces(spaces[i]);
 			}
 
 			else {
 
-				action_t act = it->second[gram.variables[i].id];
+				action_t act = it->second[grammar_global.variables[i].id];
 
 				if (act.type == NONE) {
 
@@ -205,5 +184,3 @@ void table_show (table_t tab, grammar_t gram) {
 		cout << endl << endl;
 	}
 }
-
-#endif
