@@ -5,3 +5,6 @@ tests/*
 
 # Ignore any executables
 bin/*
+
+#Ignore VsCode's settings
+.vscode/*
