@@ -12,9 +12,9 @@ using namespace std;
 
 // ---- Implementation ----------------------------------------------------------------------
 
-rule_t rule_new (variable_t head, vector<variable_t> production) {
+Rule rule_new (Variable head, vector<Variable> production) {
 
-	rule_t r;
+	Rule r;
 
 	r.head = head;
 	r.production = production;
@@ -22,7 +22,7 @@ rule_t rule_new (variable_t head, vector<variable_t> production) {
 	return r;
 }
 
-bool rule_compare (rule_t r1, rule_t r2) {
+bool rule_compare (Rule r1, Rule r2) {
 
 	if ((r1.head.id != r2.head.id) || r1.production.size() != r2.production.size()) {
 
@@ -40,7 +40,7 @@ bool rule_compare (rule_t r1, rule_t r2) {
 	return true;
 }
 
-void rule_show (rule_t r) {
+void rule_show (Rule r) {
 
 	cout << r.head.id << " -> ";
 
@@ -52,9 +52,9 @@ void rule_show (rule_t r) {
 	cout << endl;
 }
 
-vector<rule_t> rule_expand (vector<rule_t> oldRules, vector<rule_t> defaultRules) {
+vector<Rule> rule_expand (vector<Rule> oldRules, vector<Rule> defaultRules) {
 
-	vector<rule_t> newRules;
+	vector<Rule> newRules;
 	
 	for (unsigned int i = 0; i < oldRules.size(); ++i)
 	{
@@ -101,7 +101,7 @@ vector<rule_t> rule_expand (vector<rule_t> oldRules, vector<rule_t> defaultRules
 	return newRules;
 }
 
-void rules_generate_first_follow (vector<variable_t> vars, vector<rule_t> rules, map<string, set<string>>& first, map<string, set<string>>& follow) {
+void rules_generate_first_follow (vector<Variable> vars, vector<Rule> rules, map<string, set<string>>& first, map<string, set<string>>& follow) {
 
 	for (auto variable_iterator : vars) {
 		
@@ -124,7 +124,7 @@ void rules_generate_first_follow (vector<variable_t> vars, vector<rule_t> rules,
 	}
 }
 
-void rules_first (set<string>& first, set<string>& partial_first, set<string>& partial_follow, string var, vector<rule_t>& rules) {
+void rules_first (set<string>& first, set<string>& partial_first, set<string>& partial_follow, string var, vector<Rule>& rules) {
 
 	if (partial_first.count(var)) {
 
@@ -168,7 +168,7 @@ void rules_first (set<string>& first, set<string>& partial_first, set<string>& p
 	}
 }
 
-void rules_follow (set<string>& follow, set<string>& partial_first, set<string>& partial_follow, string var, vector<rule_t>& rules) {
+void rules_follow (set<string>& follow, set<string>& partial_first, set<string>& partial_follow, string var, vector<Rule>& rules) {
 
 	if (partial_follow.count(var)) {
 
@@ -216,7 +216,7 @@ void rules_follow (set<string>& follow, set<string>& partial_first, set<string>&
 	}
 }
 
-void rules_find_first (set<string>& first, set<string>& partial_first, map<string, set<string>>& follows, string var, vector<rule_t>& rules) {
+void rules_find_first (set<string>& first, set<string>& partial_first, map<string, set<string>>& follows, string var, vector<Rule>& rules) {
 
 	if (partial_first.count(var)) {
 

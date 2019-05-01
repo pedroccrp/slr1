@@ -9,27 +9,25 @@
 
 // ---- Defs ----------------------------------------------------------------------
 
-typedef struct state state_t;
+struct Transition {
 
-typedef struct transition {
-
-	variable_t var;
+	Variable var;
 
 	short dest;
 	
-} transition_t;
+};
 
-typedef struct state {
+struct State {
 
 	short num;
 
-	std::vector<rule_t> rules;
-	std::vector<transition_t> transitions;
+	std::vector<Rule> rules;
+	std::vector<Transition> transitions;
 
 	bool acc = false;
 	bool hasReduction = false;
 
-	inline bool operator == (state_t comparing_state) {
+	inline bool operator == (State comparing_state) {
 
 		if (rules.size() != comparing_state.rules.size()) {
 
@@ -47,18 +45,18 @@ typedef struct state {
 		return true;
 	}
 
-} state_t;
+};
 
 // ---- Prototypes ----------------------------------------------------------------------
 
-transition_t transition_new (variable_t, short);
+Transition transition_new (Variable, short);
 
-state_t state_new (short);
-state_t state_add_rule (state_t, rule_t);
-state_t state_add_transition (state_t, transition_t);
-state_t state_complete (state_t&, std::vector<rule_t>);
-void state_show (state_t);
+State state_new (short);
+State state_add_rule (State, Rule);
+State state_add_transition (State, Transition);
+State state_complete (State&, std::vector<Rule>);
+void state_show (State);
 
-bool state_order_rule (state_t, state_t);
+bool state_order_rule (State, State);
 
 #endif	

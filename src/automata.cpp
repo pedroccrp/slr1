@@ -5,7 +5,9 @@
 #include <iostream>
 #include <algorithm>
 
+#include "rule.h"
 #include "state.h"
+#include "grammar.h"
 
 using namespace std;
 
@@ -13,11 +15,11 @@ using namespace std;
 
 short state_count = 0;
 
-automata_t automata_global;
+Automata automata_global;
 
 // ---- Implementation ----------------------------------------------------------------------
 
-automata_t automata_make () {
+Automata automata_make () {
 
 	// Add S' as the start non terminal
 	grammar_global.variables.insert(grammar_global.variables.begin(), variable_new(INIT_VAR, NON_TERM));
@@ -25,7 +27,7 @@ automata_t automata_make () {
 	// Add $ as the finish terminal
 	grammar_global.variables.push_back(variable_new(FINISH, TERM));
 
-	state_t first_state = state_new(state_count++);
+	State first_state = state_new(state_count++);
 
 	// Make state 0
 	{
@@ -48,7 +50,7 @@ automata_t automata_make () {
 
 			if (rule_iterator.head.id == initial_non_terminal) {
 
-				rule_t rule_aux = rule_iterator;
+				Rule rule_aux = rule_iterator;
 
 				rule_aux.production.insert(rule_aux.production.begin(), variable_new(POINT, SPECIAL));
 
@@ -72,10 +74,10 @@ automata_t automata_make () {
 	return automata_global;
 }
 
-automata_t automata_generate_states (state_t& fromState) {
+Automata automata_generate_states (State& fromState) {
 
 	// Organizes rules by variable after point
-	map<string, vector<rule_t>> separetedRules;
+	map<string, vector<Rule>> separetedRules;
 
 	for (auto rule_iterator : fromState.rules) {
 
@@ -118,7 +120,7 @@ automata_t automata_generate_states (state_t& fromState) {
 	// For each possible transition, make a new state and add transition to it
 	for (auto rule_iterator : separetedRules) {
 
-		state_t createdState;
+		State createdState;
 
 		for (unsigned int k = 0; k < rule_iterator.second.size(); ++k) {
 
@@ -127,7 +129,7 @@ automata_t automata_generate_states (state_t& fromState) {
 
 		bool stateExists = false;
 
-		transition_t transition_aux;
+		Transition transition_aux;
 
 		for (auto variable_iterator : grammar_global.variables) {
 

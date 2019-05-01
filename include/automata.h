@@ -1,31 +1,31 @@
 #ifndef AUTOMATA
 #define AUTOMATA
-	
+
 #include <vector>
 
 #include "state.h"
 
 // ---- Defs ----------------------------------------------------------------------
 
-typedef struct automata {
-	
-	std::vector<state_t> states;
+struct Automata {
 
-} automata_t;
+	std::vector<State> states;
+
+};
 
 // ---- Global Variables --------------------------------------------------------------------
 
 // Amount of states created
 extern short state_count;
 
-// Variable containing the automata produced 
-extern automata_t automata_global;
+// Variable containing the automata produced
+extern Automata automata_global;
 
 // ---- Prototypes ----------------------------------------------------------------------
 
-automata_t automata_make ();
-automata_t automata_generate_states (state_t&);
+Automata automata_make ();
+Automata automata_generate_states (State&);
 
 void automata_show ();
 
-#endif	
+#endif

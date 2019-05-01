@@ -9,25 +9,25 @@
 
 // ---- Defs ----------------------------------------------------------------------
 
-typedef struct grammar {
+struct Grammar {
 	
-	std::vector<variable> variables;
-	std::vector<rule> rules;
+	std::vector<Variable> variables;
+	std::vector<Rule> rules;
 
-} grammar_t;
+};
 
 // ---- Global Variables --------------------------------------------------------------------
 
 // Variable containing the grammar obtained
-extern grammar_t grammar_global;
+extern Grammar grammar_global;
 
 // ---- Prototypes ----------------------------------------------------------------------
 
-grammar_t grammar_request ();
+Grammar grammar_request ();
 
-variable_t grammar_find_variable (std::string);
+Variable grammar_find_variable (std::string);
 
-void grammar_string_to_var (std::string, var_types, grammar_t&);
+void grammar_string_to_var (std::string, var_types, Grammar&);
 
 void grammar_show ();
 

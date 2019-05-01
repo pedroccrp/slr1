@@ -11,11 +11,11 @@ using namespace std;
 
 // ---- Global Variables --------------------------------------------------------------------
 
-grammar_t grammar_global;
+Grammar grammar_global;
 
 // ---- Implementation ----------------------------------------------------------------------
 
-grammar_t grammar_request () {
+Grammar grammar_request () {
 
 	short i = 0;
 
@@ -47,7 +47,7 @@ grammar_t grammar_request () {
 
 			bool gotHead = false;
 
-			rule_t r;
+			Rule r;
 
 			for (unsigned int j = 0; j < aux.length(); ++j)
 			{
@@ -86,9 +86,9 @@ grammar_t grammar_request () {
 	return grammar_global;
 }
 
-void grammar_string_to_var (string str, var_types type, grammar_t& grammar_global) {
+void grammar_string_to_var (string str, var_types type, Grammar& grammar_global) {
 
-	variable_t v = variable_new("", type);
+	Variable v = variable_new("", type);
 
 	string token = "";
 
@@ -118,7 +118,7 @@ void grammar_string_to_var (string str, var_types type, grammar_t& grammar_globa
 	}
 }
 
-variable_t grammar_find_variable (string id) {
+Variable grammar_find_variable (string id) {
 
 	for (unsigned int i = 0; i < grammar_global.variables.size(); ++i)
 	{

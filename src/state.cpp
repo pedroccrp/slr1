@@ -11,9 +11,9 @@ using namespace std;
 
 // ---- Implementation ----------------------------------------------------------------------
 
-transition_t transition_new (variable_t v, short d) {
+Transition transition_new (Variable v, short d) {
 
-	transition_t t;
+	Transition t;
 
 	t.var = v;
 	t.dest = d;
@@ -21,37 +21,37 @@ transition_t transition_new (variable_t v, short d) {
 	return t;
 }
 
-state_t state_new (short num) {
+State state_new (short num) {
 
-	state_t s;
+	State s;
 
 	s.num = num;
 
 	return s;
 }
 
-state_t state_add_rule (state_t s, rule_t r) {
+State state_add_rule (State s, Rule r) {
 
 	s.rules.push_back(r);
 
 	return s;
 }
 
-state_t state_add_transition (state_t s, transition_t t) {
+State state_add_transition (State s, Transition t) {
 
 	s.transitions.push_back(t);
 
 	return s;
 }
 
-state_t state_complete (state_t& s, vector<rule_t> defaultRules) {
+State state_complete (State& s, vector<Rule> defaultRules) {
 
 	for (auto defR = defaultRules.begin(); defR != defaultRules.end(); ++defR)
 	{
 		defR->production.insert(defR->production.begin(), variable_new(POINT, SPECIAL));
 	}
 
-	vector<rule_t> oldRules = s.rules, newRules, auxRules;
+	vector<Rule> oldRules = s.rules, newRules, auxRules;
 
 	do {
 
@@ -59,11 +59,11 @@ state_t state_complete (state_t& s, vector<rule_t> defaultRules) {
 
 		auxRules.clear();
 
-		for (std::vector<rule_t>::iterator n = newRules.begin(); n != newRules.end(); ++n) {
+		for (std::vector<Rule>::iterator n = newRules.begin(); n != newRules.end(); ++n) {
 			
 			bool exists = false;
 
-			for (std::vector<rule_t>::iterator o = s.rules.begin(); o != s.rules.end(); ++o) {
+			for (std::vector<Rule>::iterator o = s.rules.begin(); o != s.rules.end(); ++o) {
 
 				if (rule_compare(*o, *n)) {
 
@@ -87,7 +87,7 @@ state_t state_complete (state_t& s, vector<rule_t> defaultRules) {
 	return s;
 }
 
-void state_show (state_t s) {
+void state_show (State s) {
 
 	cout << "------------- "<< s.num << " ---------------------" << endl << endl;
 
@@ -129,7 +129,7 @@ void state_show (state_t s) {
 
 }
 
-bool state_order_rule (state_t s1, state_t s2) {
+bool state_order_rule (State s1, State s2) {
 
 	return s1.num < s2.num;
 }

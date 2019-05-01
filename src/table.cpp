@@ -14,24 +14,24 @@ using namespace std;
 
 // ---- Global Variables --------------------------------------------------------------------
 
-table_t table_global;
+Table table_global;
 
 // ---- Implementation ----------------------------------------------------------------------
 
-table_t table_make (map<string, set<string>>& first, map<string, set<string>>& follow) {
+Table table_make (map<string, set<string>>& first, map<string, set<string>>& follow) {
 
-	map<string, action_t> base;
+	map<string, Action> base;
 
 	for (auto state_iterator : automata_global.states)
 	{
-		state_t currentState = state_iterator;
+		State currentState = state_iterator;
 
 		table_global[state_iterator.num] = base;
 
 		// STATE IS ACCEPTANCE
 		if (currentState.acc) {
 
-			action_t act;
+			Action act;
 
 			act.type = ACC;	
 
@@ -43,9 +43,9 @@ table_t table_make (map<string, set<string>>& first, map<string, set<string>>& f
 		// SHIFTS and NORMAL TRANSITIONS
 		for (unsigned int k = 0; k < currentState.transitions.size(); ++k)
 		{	
-			variable_t transitionVar = currentState.transitions[k].var;
+			Variable transitionVar = currentState.transitions[k].var;
 
-			action_t act;
+			Action act;
 
 			act.type = (transitionVar.type == NON_TERM) ? NONE : SHIFT;
 
@@ -59,11 +59,11 @@ table_t table_make (map<string, set<string>>& first, map<string, set<string>>& f
 
 			for (unsigned int k = 0; k < currentState.rules.size(); ++k) {
 
-				vector<variable_t> prod = currentState.rules[k].production;
+				vector<Variable> prod = currentState.rules[k].production;
 
 				if (prod[prod.size() - 1].id == POINT) {
 
-					action_t act;
+					Action act;
 					
 					act.type = REDUCE;
 
@@ -121,7 +121,7 @@ void table_show () {
 
 	cout << " | " << endl << endl;
 
-	for (table_t::iterator it = table_global.begin(); it != table_global.end(); it++)
+	for (Table::iterator it = table_global.begin(); it != table_global.end(); it++)
 	{
 		string num = to_string(it->first);
 
@@ -140,7 +140,7 @@ void table_show () {
 
 			else {
 
-				action_t act = it->second[grammar_global.variables[i].id];
+				Action act = it->second[grammar_global.variables[i].id];
 
 				if (act.type == NONE) {
 
@@ -170,7 +170,7 @@ void table_show () {
 
 				else {
 
-					vector<variable_t> prod = act.reduceRule.production;
+					vector<Variable> prod = act.reduceRule.production;
 
 					cout << "r" << " " << prod.size() << " " << act.reduceRule.head.id; 
 

@@ -9,28 +9,27 @@
 
 // ---- Defs ----------------------------------------------------------------------
 
-typedef enum {NONE, SHIFT, REDUCE, ACC} act_types;
+typedef enum {NONE, SHIFT, REDUCE, ACC} ActionTypes;
 
-typedef struct action {
+struct Action {
 	
-	act_types type;
+	ActionTypes type;
 
 	short stateDest;
 
-	rule_t reduceRule;
+	Rule reduceRule;
+};
 
-} action_t;
-
-typedef std::map<short, std::map<std::string, action_t>> table_t;
+typedef std::map<short, std::map<std::string, Action>> Table;
 
 // ---- Global Variables --------------------------------------------------------------------
 
 // Variable containing the table produced
-extern table_t table_global;
+extern Table table_global;
 
 // ---- Prototypes ----------------------------------------------------------------------
 
-table_t table_make (std::map<std::string, std::set<std::string>>&, std::map<std::string, std::set<std::string>>&);
+Table table_make (std::map<std::string, std::set<std::string>>&, std::map<std::string, std::set<std::string>>&);
 
 void table_show ();
 

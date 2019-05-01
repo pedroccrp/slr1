@@ -32,7 +32,7 @@ int main(int argc, char const *argv[])
 
 	// --------- Table -----------------------------------------
 	
-	table_t tab = table_make(first, follow);
+	table_make(first, follow);
 
 	table_show();
 

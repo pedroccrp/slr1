@@ -6,9 +6,9 @@ using namespace std;
 
 // ---- Implementation ----------------------------------------------------------------------
 
-variable_t variable_new (string id, var_types type) {
+Variable variable_new (string id, var_types type) {
 
-	variable_t v;
+	Variable v;
 
 	v.id = id;
 	v.type = type;
