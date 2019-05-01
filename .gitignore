@@ -1,3 +1,7 @@
-*
-!*.h
-!*.cpp
+# Ignore the build and lib dirs
+build/*
+lib/*
+tests/*
+
+# Ignore any executables
+bin/*
