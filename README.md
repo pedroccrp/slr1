@@ -7,6 +7,12 @@ Generates a table from a Context-Free Grammar to be printed or used as a base fo
 ### Pre-requisites
 
 - A Context-Free Grammar to be used as an input following the format bellow:
+  
+  * **Non Terminals** at the first line
+  * **Terminals** at the second line
+  * **Rules** on the lines bellow
+
+**Model:**
 
 ```
 <Non_Term_1> <Non_Term_2> .. <Non_Term_N>
@@ -17,17 +23,22 @@ Generates a table from a Context-Free Grammar to be printed or used as a base fo
 ........
 <Rule_N>
 ```
-* **Non_Term_1** is the **Start Variable**.
-* **"."**, **"$"** and **"SS"** can't be used as **Non Terminals** nor **Terminals**. 
-* **ALL** Non Terminals and Terminals used within the rules must be declared beforehand.
-* Any number of blank lines are allowed before and after any Rule, but Non Terminals and Terminals **must** be at line 1 and 2, respectively.
+
+- Obs:
+
+  * **Non_Term_1** is the **Start Variable**
+  * **"."**, **"$"** and **"SS"** can't be used as **Non Terminals** nor **Terminals**
+  * **ALL** Non Terminals and Terminals used within the rules must be declared beforehand
+  * Any number of blank lines are allowed before and after any Rule
 
 **Example:**
 
 ```
 T A
 i ; [ ] e =
+
 T i A ;
+
 A [ e ]
 A = e
 A 
