@@ -4,7 +4,7 @@ Generates a table from a Context-Free Grammar to be printed or used as a base fo
 
 ## Getting Started
 
-### Prerequisites
+### Pre-requisites
 
 - A Context-Free Grammar to be used as an input following the format bellow:
 
@@ -35,16 +35,14 @@ A
 
 ### Installing
 
-Compile **srt1.cpp** and run passing the Grammar through **STDIN**.
-
-- Compile
+* Compile
 ```
-g++ -o srt1 srt1.cpp
+make
 ```
 
-- Run (Linux)
+* Run (Linux)
 ```
-srt1 < grammar
+bin/slr1 < grammar
 ```
 
 ## Built With
