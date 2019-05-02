@@ -6,7 +6,7 @@ using namespace std;
 
 // ---- Implementation ----------------------------------------------------------------------
 
-Variable variable_new (string id, var_types type) {
+Variable variable_new (string id, VariableTypes type) {
 
 	Variable v;
 

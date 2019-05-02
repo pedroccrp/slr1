@@ -9,17 +9,17 @@
 #define FINISH "$"
 #define INIT_VAR "SS"
 
-typedef enum {TERM, NON_TERM, SPECIAL} var_types;
+typedef enum {TERM, NON_TERM, SPECIAL} VariableTypes;
 
 struct Variable {
 	
 	std::string id;
-	var_types type;
+	VariableTypes type;
 
 };
 
 // ---- Prototypes ----------------------------------------------------------------------
 
-Variable variable_new (std::string, var_types);
+Variable variable_new (std::string, VariableTypes);
 
 #endif
