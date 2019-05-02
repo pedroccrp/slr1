@@ -192,31 +192,43 @@ void TableParsedPrint () {
 		 << "------- Parsed Table -----------------------------------------------------------------------" << endl
 		 << endl;
 
+	cout << "{" << endl;
 
 	for (auto table_state_iterator : table_global) {
 
-		cout << table_state_iterator.first << " " << table_state_iterator.second.size() << endl;
+		unsigned int num_actions = table_state_iterator.second.size();
+
+		cout << "{" << table_state_iterator.first << ", {" << endl;
 
 		for (auto state_variable_iterator : table_state_iterator.second) {
 
-			cout << state_variable_iterator.first << " ";
+			cout << "{\"" << state_variable_iterator.first << "\", {";
 
 			if (state_variable_iterator.second.type == NONE) {
 
-				cout << "none" << " " << 0 << " ";
+				cout << 0 << ", " << 0 << ", ";
 			}
 			else if (state_variable_iterator.second.type == SHIFT) {
 
-				cout << "shift" << " " << 0 << " ";
+				cout << 1 << ", " << 0 << ", ";
 			}
 			else if (state_variable_iterator.second.type == REDUCE) {
 
-				cout << "reduce" << " " << state_variable_iterator.second.reduceRule.production.size() << " ";
+				cout << 2 << ", " << state_variable_iterator.second.reduceRule.production.size() << ", ";
 			}
 
-			cout << state_variable_iterator.second.stateDest << endl;
+			cout << state_variable_iterator.second.stateDest << "}}";
+
+			if (--num_actions > 0) {
+
+				cout << ",";
+			}
+
+			cout << endl;
 		}
 
-		cout << endl;
+		cout << "}" << endl;
 	}
+
+	cout << "};" << endl;
 }

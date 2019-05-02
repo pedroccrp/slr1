@@ -39,7 +39,7 @@ void table_show ();
 // .............................
 // <blank line>
 //
-// action_type = none, reduce, shift
+// action_type = none = 0,  shift = 1, reduce = 2
 // stack_clear_number - amount of data to reduce from the stack (in pairs)
 // state_destination - the state that will be inserted on the stack
 void TableParsedPrint ();
