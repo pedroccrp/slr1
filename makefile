@@ -14,6 +14,7 @@ OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 INC := -I include
 
 $(TARGET) : $(OBJECTS)
+	@mkdir -p "bin"
 	@echo " Linking..."; $(CC) $^ -o $(TARGET)
 	@echo " Done!"
 
