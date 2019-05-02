@@ -195,7 +195,7 @@ void TableParsedPrint () {
 
 	for (auto table_state_iterator : table_global) {
 
-		cout << table_state_iterator.first << endl;
+		cout << table_state_iterator.first << " " << table_state_iterator.second.size() << endl;
 
 		for (auto state_variable_iterator : table_state_iterator.second) {
 

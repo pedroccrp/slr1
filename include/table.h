@@ -34,7 +34,7 @@ Table table_make (std::map<std::string, std::set<std::string>>&, std::map<std::s
 void table_show ();
 
 // For each state the format of the print will be:
-// <state_num>
+// <state_num> <state_num_actions>
 // <variable_id> <action_type> <stack_clear_number> <state_destination>
 // .............................
 // <blank line>
