@@ -227,7 +227,7 @@ void TableParsedPrint () {
 			cout << endl;
 		}
 
-		cout << "}";
+		cout << "}}";
 
 		if (table_global.size() - 1 > (unsigned int)table_state_iterator.first) {
 
