@@ -33,4 +33,15 @@ Table table_make (std::map<std::string, std::set<std::string>>&, std::map<std::s
 
 void table_show ();
 
+// For each state the format of the print will be:
+// <state_num>
+// <variable_id> <action_type> <stack_clear_number> <state_destination>
+// .............................
+// <blank line>
+//
+// action_type = none, reduce, shift
+// stack_clear_number - amount of data to reduce from the stack (in pairs)
+// state_destination - the state that will be inserted on the stack
+void TableParsedPrint ();
+
 #endif

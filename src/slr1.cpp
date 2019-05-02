@@ -36,5 +36,7 @@ int main(int argc, char const *argv[])
 
 	table_show();
 
+	TableParsedPrint();
+
 	return 0;
 }

@@ -184,3 +184,39 @@ void table_show () {
 		cout << endl << endl;
 	}
 }
+
+void TableParsedPrint () {
+
+	cout << endl
+		 << endl
+		 << "------- Parsed Table -----------------------------------------------------------------------" << endl
+		 << endl;
+
+
+	for (auto table_state_iterator : table_global) {
+
+		cout << table_state_iterator.first << endl;
+
+		for (auto state_variable_iterator : table_state_iterator.second) {
+
+			cout << state_variable_iterator.first << " ";
+
+			if (state_variable_iterator.second.type == NONE) {
+
+				cout << "none" << " " << 0 << " ";
+			}
+			else if (state_variable_iterator.second.type == SHIFT) {
+
+				cout << "shift" << " " << 0 << " ";
+			}
+			else if (state_variable_iterator.second.type == REDUCE) {
+
+				cout << "reduce" << " " << state_variable_iterator.second.reduceRule.production.size() << " ";
+			}
+
+			cout << state_variable_iterator.second.stateDest << endl;
+		}
+
+		cout << endl;
+	}
+}

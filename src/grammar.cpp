@@ -86,7 +86,7 @@ Grammar grammar_request () {
 	return grammar_global;
 }
 
-void grammar_string_to_var (string str, var_types type, Grammar& grammar_global) {
+void grammar_string_to_var (string str, VariableTypes type, Grammar& grammar_global) {
 
 	Variable v = variable_new("", type);
 
