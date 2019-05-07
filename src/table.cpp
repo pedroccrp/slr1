@@ -93,7 +93,7 @@ void table_show () {
 
 	#define print_spaces(n) for (unsigned int count = 0; count < n; count++) {cout << " ";};
 
-	unsigned short maxSize = 20, minSize = 20;
+	unsigned short maxSize = 40, minSize = 40;
 
 	vector<unsigned short> spaces;
 
