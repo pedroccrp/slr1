@@ -17,31 +17,42 @@ Grammar grammar_global;
 
 Grammar grammar_request () {
 
-	short i = 0;
-
 	string aux;
 
-	while (i++, getline(cin, aux)) {
+    GrammarStates state;
+
+	while (getline(cin, aux)) {
 
 		if (aux == "") {
-
 			continue;
-		}
+		} 
+        else if (aux == "#NON_TERMS") {
+            state = NON_TERMS;
+            continue;
+        }
+        else if (aux == "#TERMS") {
+            state = TERMS;
+            continue;
+		} 
+        else if (aux == "#RULES") {
+            state = RULES;
+            continue;
+        }
 
 		// Non-terminals
-		if (i == 1) {
+		if (state == NON_TERMS) {
 			
 			grammar_string_to_var(aux, NON_TERM, grammar_global);	
 		}
 
 		// Terminals
-		else if (i == 2) {
+		else if (state == TERMS) {
 
 			grammar_string_to_var(aux, TERM, grammar_global);
 		}
 
 		// Rules (Head + Production)
-		else {
+		else if (state == RULES) {
 
 			string token = "";
 
@@ -81,6 +92,11 @@ Grammar grammar_request () {
 
 			grammar_global.rules.push_back(r);
 		}
+
+        else {
+            cerr << "Grammar lacking (NON_TERMS, TERMS, RULES) statements!" << endl;
+            exit(1);
+        }
 	}	
 
 	return grammar_global;

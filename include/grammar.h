@@ -9,6 +9,12 @@
 
 // ---- Defs ----------------------------------------------------------------------
 
+enum GrammarStates {
+    NON_TERMS = 0, 
+    TERMS     = 1, 
+    RULES     = 2
+};
+
 struct Grammar {
 	
 	std::vector<Variable> variables;
