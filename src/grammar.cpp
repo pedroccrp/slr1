@@ -60,9 +60,9 @@ Grammar grammar_request () {
 
 			Rule r;
 
-			for (unsigned int j = 0; j < aux.length(); ++j)
+			for (unsigned int j = 0; j <= aux.length(); ++j)
 			{
-				if (aux[j] == ' ') {
+				if (j == aux.length() || aux[j] == ' ') {
 
 					if (!gotHead) {
 
@@ -71,9 +71,15 @@ Grammar grammar_request () {
 						r.head = grammar_find_variable(token);
 					}
 
-					else {
+					else if (token != "") {
+                        Variable found_variable = grammar_find_variable(token);
 
-						r.production.push_back(grammar_find_variable(token));
+                        if (found_variable.id == "") {
+                            cerr << "Used not declared variable: " << token << endl;
+                            exit(1);
+                        }
+
+						r.production.push_back(found_variable);
 					}
 
 					token = "";
