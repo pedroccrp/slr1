@@ -13,7 +13,7 @@ using namespace std;
 // ---- Implementation ----------------------------------------------------------------------
 
 Rule rule_new (Variable head, vector<Variable> production) {
-
+    
 	Rule r;
 
 	r.head = head;

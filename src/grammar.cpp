@@ -15,44 +15,54 @@ Grammar grammar_global;
 
 // ---- Implementation ----------------------------------------------------------------------
 
-Grammar grammar_request () {
-
+Grammar grammar_request () 
+{
 	string aux;
 
     GrammarStates state;
 
-	while (getline(cin, aux)) {
-
-		if (aux == "") {
+	while (getline(cin, aux)) 
+    {
+		if (aux == "") 
+        {
 			continue;
 		} 
-        else if (aux == "#NON_TERMS") {
+        else if (aux == "#NON_TERMS") 
+        {
             state = NON_TERMS;
             continue;
         }
-        else if (aux == "#TERMS") {
+        else if (aux == "#TERMS") 
+        {
             state = TERMS;
             continue;
 		} 
-        else if (aux == "#RULES") {
+        else if (aux == "#RULES") 
+        {
             state = RULES;
             continue;
         }
+        else if (aux[0] == '#')
+        {
+            continue;
+        }
+
 
 		// Non-terminals
-		if (state == NON_TERMS) {
-			
+		if (state == NON_TERMS) 
+        {	
 			grammar_string_to_var(aux, NON_TERM, grammar_global);	
 		}
 
 		// Terminals
-		else if (state == TERMS) {
-
+		else if (state == TERMS) 
+        {
 			grammar_string_to_var(aux, TERM, grammar_global);
 		}
 
 		// Rules (Head + Production)
-		else if (state == RULES) {
+		else if (state == RULES) 
+        {
 
 			string token = "";
 
