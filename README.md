@@ -27,6 +27,17 @@ Generates a table from a Context-Free Grammar to be printed or used as a base fo
 <Rule_N>
 ```
 
+**Comments:**
+
+- Lines starting with an **#** will be **ignored** 
+
+  * **#** must be the first character in line
+  * #NON_TERMS, #TERMS and #RULES are special cases and shouldn't be used as comments
+
+```
+# This line will be ignored
+```
+
 - Obs:
 
   * **Non_Term_1** is the **Start Variable**
