@@ -202,22 +202,22 @@ void TableParsedPrint () {
 
 		for (auto state_variable_iterator : table_state_iterator.second) {
 
-			cout << "{\"" << state_variable_iterator.first << "\", {";
+			cout << "{\"" << state_variable_iterator.first << "\", {\"";
 
 			if (state_variable_iterator.second.type == NONE) {
 
-				cout << 0 << ", " << 0 << ", ";
+				cout << 0 << "\", \"" << 0 << "\", \"";
 			}
 			else if (state_variable_iterator.second.type == SHIFT) {
 
-				cout << 1 << ", " << 0 << ", ";
+				cout << 1 << "\", \"" << 0 << "\", \"";
 			}
 			else if (state_variable_iterator.second.type == REDUCE) {
 
-				cout << 2 << ", " << state_variable_iterator.second.reduceRule.production.size() << ", ";
+				cout << 2 << "\", \"" << state_variable_iterator.second.reduceRule.production.size() << "\", \"";
 			}
 
-			cout << state_variable_iterator.second.stateDest << "}}";
+			cout << state_variable_iterator.second.stateDest << "\", \"" << state_variable_iterator.second.reduceRule.head.id << "\"}}";
 
 			if (--num_actions > 0) {
 

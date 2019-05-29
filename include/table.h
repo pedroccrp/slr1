@@ -35,13 +35,13 @@ void table_show ();
 
 // For each state the format of the print will be:
 // <state_num> <state_num_actions>
-// <variable_id> <action_type> <stack_clear_number> <state_destination>
+// <variable_id> <action_type> <stack_clear_number> <state_destination> <reduce_rule_head>
 // .............................
 // <blank line>
 //
-// action_type = none = 0,  shift = 1, reduce = 2
-// stack_clear_number - amount of data to reduce from the stack (in pairs)
-// state_destination - the state that will be inserted on the stack
+// action_type = none = 0,  shift = 1, reduce = 2 (STRING)
+// stack_clear_number - amount of data to reduce from the stack (in pairs) (STRING)
+// state_destination - the state that will be inserted on the stack (STRING)
 void TableParsedPrint ();
 
 #endif
