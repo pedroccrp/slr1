@@ -74,13 +74,109 @@ make
 bin/slr1 < grammar
 ```
 
+### Program Output
+
+* Stardard Output
+    ```
+    ------- Grammar ----------------------------------------------------------------------
+
+    Variables:
+
+        .........
+
+
+    Rules:
+
+        .........
+
+
+    ------- Automata --------------------------------------------------------------------
+
+    ------------- <State Number> ---------------------
+
+    Rules: 
+
+        .........
+
+    Transitions: 
+
+        .........
+
+    Type: 
+
+        <ACC or REDUCE>
+
+
+    ------- First ----------------------------------------------------------------------
+
+    -----------------------
+
+    <Non Terminal>
+
+        <Non Terminal's First(1)>
+
+
+    ------- Follow ----------------------------------------------------------------------
+
+    -----------------------
+
+    <Non Terminal>
+
+        <Non Terminal's Follow(1)>
+
+
+    ------- Table -----------------------------------------------------------------------
+
+        .........
+
+
+    ------- Parsed Table -----------------------------------------------------------------------
+
+    {
+        {<State Number>, {
+            <Terminal or Non Terminal>, {<Transition Type>, <Reduce Rule Production Size>, <Next State>, <Reduce Rule Head>}}
+        },
+        ..................
+    }
+
+    ```
+
+    * Parsed Table
+
+        * Transition Types:
+            
+            * 0 - NONE
+            * 1 - SHIFT
+            * 2 - REDUCE
+            * 3 - ACC
+
+        * Reduce Rule Production Size
+
+            * Only use if transition type is REDUCE
+            
+        * Next State
+
+            * Only use if transition type is SHIFT or NONE
+            
+        * Reduce Rule Head
+
+            * Only use if transition type is REDUCE 
+
+
+* Error Output
+   
+    ```
+    Conflict: <State Number> <Non Terminal that generated conflict> <Terminal of conflict>
+    ..................
+    ```
+
 ## Built With
 
 * C++
 
 ## Authors
 
-* **Pedro Pontes** - [Github](https://github.com/pedroccrp)
+* **Pedro Pontes** - [pedroccrp](https://github.com/pedroccrp)
 
 ## License
 
