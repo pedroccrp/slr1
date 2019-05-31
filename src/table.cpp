@@ -216,6 +216,10 @@ void TableParsedPrint () {
 
 				cout << 2 << "\", \"" << state_variable_iterator.second.reduceRule.production.size() << "\", \"";
 			}
+            else {
+
+				cout << 3 << "\", \"" << 0 << "\", \"";
+            }
 
 			cout << state_variable_iterator.second.stateDest << "\", \"" << state_variable_iterator.second.reduceRule.head.id << "\"}}";
 
